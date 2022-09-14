@@ -1,0 +1,28 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:3.12-build as pi-blaster-builder
+RUN install_packages build-base autoconf automake linux-headers
+WORKDIR /pi-blaster
+COPY ./pi-blaster/ .
+RUN ./autogen.sh
+RUN ./configure
+RUN make
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-node:12-latest-build as build
+WORKDIR /app
+
+COPY ./package.json ./
+COPY ./package-lock.json ./
+RUN npm install
+
+COPY ./public/ ./public/
+COPY ./src/ ./src/
+RUN npm run build
+
+COPY . ./
+
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-node:12-latest-run
+
+WORKDIR /app
+COPY --from=build /app /app
+COPY --from=pi-blaster-builder /pi-blaster/pi-blaster .
+
+CMD ["node", "server/index.js"]

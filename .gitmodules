@@ -1,0 +1,3 @@
+[submodule "api/pi-blaster"]
+	path = api/pi-blaster
+	url = git@github.com:sarfata/pi-blaster.git
