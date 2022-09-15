@@ -23,10 +23,12 @@ class Light {
     this.channels = channels;
     this.selector = selector;
     this.interval = null;
-    this.isOn = false;
+
     /** @type {Frame[]} */
     this.frames = [];
+
     const { color } = this._createFrame(white);
+    this.isOn = false;
     this.effectiveColor = color;
     this.transitions([{ color }]);
   }
@@ -92,29 +94,34 @@ class Light {
    * @param {Transition[]} values - List of color transitions
    */
   transitions(values) {
-    if (values.length === 1) {
-      this.frames = [this._createFrame(Color(values[0].color))];
-      return;
-    }
-
     /** @type {Frame[]} */
     const frames = [];
-    for (let t = 0; t < values.length; t++) {
-      const from = values[t];
-      const fromColor = Color(from.color);
 
-      const to = values[(t + 1) % values.length];
-      const toColor = Color(to.color);
+    if (values.length === 1) {
+      const [{ color }] = values;
+      frames.push(this._createFrame(Color(color)));
+    } else {
+      for (let t = 0; t < values.length; t++) {
+        const from = values[t];
+        const fromColor = Color(from.color);
 
-      const frameCount = from.duration / Light.tickDelayMs;
-      for (let frame = 0; frame < frameCount; frame++) {
-        const percentage = frame / frameCount;
-        const frameColor = fromColor.mix(toColor, percentage);
-        frames.push(this._createFrame(frameColor));
+        const to = values[(t + 1) % values.length];
+        const toColor = Color(to.color);
+
+        const frameCount = from.duration / Light.tickDelayMs;
+        for (let frame = 0; frame < frameCount; frame++) {
+          const percentage = frame / frameCount;
+          const frameColor = fromColor.mix(toColor, percentage);
+          frames.push(this._createFrame(frameColor));
+        }
       }
     }
 
     this.frames = frames;
+
+    if (this.isOn) {
+      this.on();
+    }
   }
 
   /**
@@ -132,7 +139,7 @@ class Light {
 }
 
 function createRGBLight(redPin, greenPin, bluePin) {
-  return new Light(
+  const light = new Light(
     {
       Red: `${redPin}`,
       Green: `${greenPin}`,
@@ -143,16 +150,18 @@ function createRGBLight(redPin, greenPin, bluePin) {
       return {
         color: color.hex(),
 
-        Red: (r / 255).toFixed(2),
-        Green: (g / 255).toFixed(2),
-        Blue: (b / 255).toFixed(2),
+        Red: (r / 255).toFixed(4),
+        Green: (g / 255).toFixed(4),
+        Blue: (b / 255).toFixed(4),
       };
     }
   );
+  light.off();
+  return light;
 }
 
 function createWhiteLight(pin) {
-  return new Light(
+  const light = new Light(
     {
       White: `${pin}`,
     },
@@ -162,14 +171,16 @@ function createWhiteLight(pin) {
       return {
         color: grayscale.hex(),
 
-        White: luminosity.toFixed(2),
+        White: luminosity.toFixed(4),
       };
     }
   );
+  light.off();
+  return light;
 }
 
 function createAdjustableWhiteLight(warmPin, coolPin) {
-  return new Light(
+  const light = new Light(
     {
       Warm: `${warmPin}`,
       Cool: `${coolPin}`,
@@ -179,11 +190,13 @@ function createAdjustableWhiteLight(warmPin, coolPin) {
       return {
         color: Color.rgb(r, 0, b).hex(),
 
-        Warm: (r / 255).toFixed(2),
-        Cool: (b / 255).toFixed(2),
+        Warm: (r / 255).toFixed(4),
+        Cool: (b / 255).toFixed(4),
       };
     }
   );
+  light.off();
+  return light;
 }
 
 exports.Light = Light;

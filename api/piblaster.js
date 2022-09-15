@@ -13,7 +13,6 @@ spawn(command, args);
  * @param {string} cmd - pi-blaster command
  */
 exports.execute = function (cmd) {
-  console.debug('executing ', cmd);
   const buffer = Buffer.from(cmd + '\n');
   fs.open(piBlaster, 'w', undefined, function (openError, fd) {
     if (openError) {
