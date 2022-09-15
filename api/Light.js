@@ -24,10 +24,11 @@ class Light {
     this.selector = selector;
     this.interval = null;
     this.isOn = false;
-    this.effectiveColor = white.hex();
     /** @type {Frame[]} */
     this.frames = [];
-    this.transitions([{ color: this.effectiveColor }]);
+    const { color } = this._createFrame(white);
+    this.effectiveColor = color;
+    this.transitions([{ color }]);
   }
 
   /**

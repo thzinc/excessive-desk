@@ -5,11 +5,8 @@ const {
   createWhiteLight,
   createAdjustableWhiteLight,
 } = require('./Light');
-// const path = require('path');
 const app = express();
 const http = require('http').Server(app);
-// const io = require('socket.io')(http);
-// const { start, stop } = require('./gpio.js');
 
 const port = process.env.API_PORT || 80;
 
@@ -25,7 +22,11 @@ const lights = new Map(
 
 app.use(express.json());
 
-app.get('/lights/:type', async (req, res) => {
+app.get('/lights', (_, res) => {
+  res.status(200).json(Array.from(lights.keys()));
+});
+
+app.get('/lights/:type', (req, res) => {
   const light = lights.get(req.params.type);
   if (!light) {
     res.sendStatus(404);
@@ -40,7 +41,7 @@ app.get('/lights/:type', async (req, res) => {
   res.status(200).json(dto);
 });
 
-app.get('/lights/:type', async (req, res) => {
+app.get('/lights/:type', (req, res) => {
   const light = lights.get(req.params.type);
   if (!light) {
     res.sendStatus(404);
@@ -78,7 +79,5 @@ app.put('/lights/:type/transitions', (req, res) => {
   light.transitions(Array.from(req.body));
   res.sendStatus(202);
 });
-
-// io.on('connection', (socket) => {});
 
 http.listen(port);
