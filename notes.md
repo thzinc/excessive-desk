@@ -13,3 +13,5 @@
 Notes:
 
 - Disabled 1-wire on GPIO 4
+
+- https://github.com/balenalabs/balena-dash

@@ -1,0 +1,32 @@
+version: '2'
+volumes:
+  settings:
+services:
+  kiosk:
+    restart: always
+    build: ./kiosk
+    privileged: true
+    ports:
+      - 8000:8080
+    volumes:
+      - 'settings:/data'
+    environment:
+      KIOSK: 1
+      LAUNCH_URL: https://dakboard.com/app/screenPredefined?p=bb388498e3d130944ded358814e88f0c
+  api:
+    restart: always
+    build: ./api
+    environment:
+      API_PORT: '8001'
+    privileged: true
+    labels:
+      io.balena.features.dbus: '1'
+      io.balena.features.firmware: '1'
+    ports:
+      - 8001:8001
+  mdns-publisher:
+    build: ./mdns-publisher
+    environment:
+      DBUS_SYSTEM_BUS_ADDRESS: 'unix:path=/host/run/dbus/system_bus_socket'
+    labels:
+      io.balena.features.dbus: '1'

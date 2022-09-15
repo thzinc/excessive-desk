@@ -1,0 +1,32 @@
+name: excessive-desk
+type: sw.application
+description: >-
+  Enjoy a desk with an excessive amount of gadgetry
+assets:
+  repository:
+    type: blob.asset
+    data:
+      url: 'https://github.com/thzinc/excessive-desk'
+data:
+  applicationEnvironmentVariables:
+    - EXCESSIVE_DESK_HOSTNAME: 'excessive-desk'
+    - KIOSK: '1'
+    - LAUNCH_URL: 'https://example.com'
+  applicationConfigVariables:
+    - RESIN_HOST_CONFIG_dtoverlay: 'pi3-disable-bt'
+    - RESIN_HOST_CONFIG_dtparam: '"i2c_arm=off","spi=off","audio=off"'
+  defaultDeviceType: raspberry-pi
+  supportedDeviceTypes:
+    - raspberry-pi
+    - raspberry-pi2
+    - raspberrypi0-2w-64
+    - raspberrypi3
+    - raspberrypi3-64
+    - raspberrypi4-64
+  mdns-publisher:
+    build: ./mdns-publisher
+    environment:
+      DBUS_SYSTEM_BUS_ADDRESS: 'unix:path=/host/run/dbus/system_bus_socket'
+    labels:
+      io.balena.features.dbus: '1'
+version: 3.5.2
