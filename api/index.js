@@ -13,10 +13,11 @@ const port = process.env.API_PORT || 80;
 /** @type {Map<string, Light>} */
 const lights = new Map(
   Object.entries({
+    // TODO: make pins configurable via environment variable
     Accent: createRGBLight(17, 27, 22),
     Task: createWhiteLight(23),
     Area: createWhiteLight(24),
-    Ring: createAdjustableWhiteLight(4, 25),
+    Ring: createAdjustableWhiteLight(25, 4),
   })
 );
 
