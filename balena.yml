@@ -15,6 +15,7 @@ data:
   applicationConfigVariables:
     - RESIN_HOST_CONFIG_dtoverlay: 'pi3-disable-bt'
     - RESIN_HOST_CONFIG_dtparam: '"i2c_arm=off","spi=off","audio=off"'
+    - RESIN_HOST_CONFIG_disable_overscan: '1'
   defaultDeviceType: raspberry-pi
   supportedDeviceTypes:
     - raspberry-pi
