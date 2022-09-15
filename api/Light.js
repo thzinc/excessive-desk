@@ -51,13 +51,13 @@ class Light {
       clearInterval(this.interval);
     }
 
-    const epoch = performance.now();
+    const epoch = Date.now();
     let lastFrame = null;
     let lastCommand = null;
     this.interval = setInterval(() => {
       if (this.frames.length === 0) return;
 
-      const now = performance.now();
+      const now = Date.now();
       const time = now - epoch;
       const frame = Math.floor(time / Light.tickDelayMs) % this.frames.length;
 
