@@ -32,6 +32,10 @@ services:
       HOMEKIT_PIN_CODE: '834-84-876'
       HOMEKIT_INTERFACE: 'eth0'
       HOMEKIT_PORT: '47129'
+    privileged: true
+    labels:
+      io.balena.features.dbus: '1'
+      io.balena.features.firmware: '1'
     ports:
       - 47129:47129
   mdns-publisher:
