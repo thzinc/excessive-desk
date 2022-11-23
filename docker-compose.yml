@@ -28,16 +28,15 @@ services:
     restart: always
     build: ./homekit
     environment:
-      API_BASE_URL: 'http://api:8001'
+      API_BASE_URL: 'http://localhost:8001'
       HOMEKIT_PIN_CODE: '834-84-876'
-      HOMEKIT_INTERFACE: 'eth0'
+      HOMEKIT_INTERFACE: 'wlan0'
       HOMEKIT_PORT: '47129'
     privileged: true
     labels:
       io.balena.features.dbus: '1'
       io.balena.features.firmware: '1'
-    ports:
-      - 47129:47129
+    network_mode: host
   mdns-publisher:
     build: ./mdns-publisher
     environment:
