@@ -17,7 +17,7 @@ services:
     restart: always
     build: ./api
     environment:
-      API_PORT: '47129'
+      API_PORT: '8001'
     privileged: true
     labels:
       io.balena.features.dbus: '1'
