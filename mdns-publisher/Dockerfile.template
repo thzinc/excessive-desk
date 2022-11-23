@@ -1,19 +1,21 @@
-FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:edge-build
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine:3.15-build
 
-RUN apk update && apk add --no-cache python3
 
-RUN apk update && apk add --no-cache --virtual .build-deps \
+RUN apk update && \
+    apk add --no-cache \
+    --virtual .build-deps \
     build-base \
-    python3-dev \
     dbus-dev \
     glib-dev \
+    python3 \
+    python3-dev \
     py3-pip \
     py3-wheel \
     py3-setuptools \
     cmake \
-    automake && \
-    pip3 install --no-cache-dir mdns-publisher && \
-    apk del .build-deps
+    automake
+RUN pip3 install --no-cache-dir mdns-publisher
+RUN apk del .build-deps
 
 COPY start.sh start.sh
 
