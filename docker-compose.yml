@@ -2,17 +2,6 @@ version: '2'
 volumes:
   settings:
 services:
-  kiosk:
-    restart: always
-    build: ./kiosk
-    privileged: true
-    ports:
-      - 8080:8080
-    volumes:
-      - 'settings:/data'
-    environment:
-      KIOSK: 1
-      LAUNCH_URL: https://dakboard.com/app/screenPredefined?p=bb388498e3d130944ded358814e88f0c
   api:
     restart: always
     build: ./api
